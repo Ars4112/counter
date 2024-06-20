@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import { Button } from "./components/Button/Button";
+import { ProgressBar } from "./components/ProgressBar/ProgressBar";
+import { Counter } from "./components/Counter/Counter";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const randomValue = Math.floor(Math.random() * (10 - 1) + 1);
+
+	const [count, setCount] = useState<number>(0);
+	const [maxValue, setMaxValue] = useState<number>(
+		Math.floor(Math.random() * (10 - 1) + 1)
+	);
+
+	const value = (count * 100) / maxValue;
+
+	const increaseValue = () => {
+		if (count === maxValue) return;
+		setCount(count + 1);
+	};
+	const recetValue = () => {
+		setMaxValue(randomValue);
+		setCount(0);
+	};
+	return (
+		<div className="App">
+			<Counter count={count} increaseValue={increaseValue} recetValue={recetValue} value={value} maxValue={maxValue}/>
+		</div>
+	);
 }
 
 export default App;
