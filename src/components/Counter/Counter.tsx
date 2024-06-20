@@ -6,20 +6,26 @@ import { ProgressBar } from "../ProgressBar/ProgressBar";
 type CounterPropsType = {
 	count: number;
 	value: number;
-    maxValue: number;
+	maxValue: number;
 	increaseValue: () => void;
 	recetValue: () => void;
+	message: string;
+	error: boolean;
 };
 
 export function Counter(props: CounterPropsType) {
-	const { count, increaseValue, recetValue, value, maxValue } = props;
+	const { count, increaseValue, recetValue, value, maxValue, message, error } = props;
 	return (
 		<div className={s.container}>
 			<div>Max Value: {maxValue}</div>
 			<div className={s.counterWrapper}>
-				<span className={count === maxValue ? `${s.counter}` : ""}>
-					{count}
-				</span>
+				{!message ? (
+					<span className={count === maxValue ? `${s.counter}` : ""}>
+						{count}
+					</span>
+				) : (
+					<span className={!error ? `${s.message}` : `${s.errorMessage}`}>{message}</span>
+				)}
 			</div>
 			<ProgressBar value={value} />
 			<div className={s.buttonWrapper}>
