@@ -63,16 +63,13 @@ export function Settings(props: SettingsPropsType) {
 			<div className={s.counterWrapper}>
 				{inputArray.map((i) => {
 					let errorInput;
-					if (+inputMaxValue <= +inputStartValue && i.value !== "") {
+					if (
+						(+inputMaxValue <= +inputStartValue && i.value !== "") ||
+						+i.value < 0
+					) {
 						errorInput = true;
 						setError(true);
-                        setMessage("Incorrect value");
-					} else setError(false);
-
-					if (+i.value < 0) {
-						errorInput = true;
-						setError(true);
-                        setMessage("Incorrect value");
+						setMessage("Incorrect value");
 					} else setError(false);
 					return (
 						<label key={i.id}>
@@ -87,7 +84,7 @@ export function Settings(props: SettingsPropsType) {
 					);
 				})}
 			</div>
-			<Button title={"set"} onClick={setSettings} disabled={false} />
+			<Button title={"set"} onClick={setSettings} disabled={error} />
 		</div>
 	);
 }

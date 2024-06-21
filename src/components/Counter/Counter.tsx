@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import s from "./Counter.module.css";
 import { Button } from "../Button/Button";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
@@ -14,17 +13,20 @@ type CounterPropsType = {
 };
 
 export function Counter(props: CounterPropsType) {
-	const { count, increaseValue, recetValue, value, maxValue, message, error } = props;
+	const { count, increaseValue, recetValue, value, maxValue, message, error } =
+		props;
 	return (
 		<div className={s.container}>
 			<div>Max Value: {maxValue}</div>
 			<div className={s.counterWrapper}>
-				{!message ? (
+				{count && !error ? (
 					<span className={count === maxValue ? `${s.counter}` : ""}>
 						{count}
 					</span>
 				) : (
-					<span className={!error ? `${s.message}` : `${s.errorMessage}`}>{message}</span>
+					<span className={!error ? `${s.message}` : `${s.errorMessage}`}>
+						{message}
+					</span>
 				)}
 			</div>
 			<ProgressBar value={value} />
