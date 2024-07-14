@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 import s from "./Settings.module.css";
 import { Button } from "../Button/Button";
+import { Input } from "../Input/Input";
 
 type SettingsPropsType = {
 	inputMaxValue: string;
@@ -13,12 +14,15 @@ type SettingsPropsType = {
 	error: boolean;
 };
 
+
 type InputType = {
 	id: number;
 	label: string;
 	function: (e: ChangeEvent<HTMLInputElement>) => void;
 	value: string;
 };
+
+
 
 export function Settings(props: SettingsPropsType) {
 	const {
@@ -38,7 +42,6 @@ export function Settings(props: SettingsPropsType) {
 	};
 
 	const getStartValueHendler = (e: ChangeEvent<HTMLInputElement>) => {
-		if (error) setMessage("fgfggf");
 		setInputStartValue(e.currentTarget.value);
 		setMessage("enter values and press 'set'");
 	};
@@ -57,30 +60,12 @@ export function Settings(props: SettingsPropsType) {
 			value: inputStartValue,
 		},
 	];
-
 	return (
 		<div className={s.container}>
 			<div className={s.counterWrapper}>
 				{inputArray.map((i) => {
-					let errorInput;
-					if (
-						(+inputMaxValue <= +inputStartValue && i.value !== "") ||
-						+i.value < 0
-					) {
-						errorInput = true;
-						setError(true);
-						setMessage("Incorrect value");
-					} else setError(false);
 					return (
-						<label key={i.id}>
-							<span>{i.label}:</span>
-							<input
-								className={errorInput ? `${s.inputError}` : ""}
-								type="number"
-								value={i.value}
-								onChange={i.function}
-							/>
-						</label>
+						<Input key={i.id} label={i.label} value={i.value} func={i.function} setError={setError} setMessage={setMessage} inputMaxValue={inputMaxValue} inputStartValue={inputStartValue}/>
 					);
 				})}
 			</div>

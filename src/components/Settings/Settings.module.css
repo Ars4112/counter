@@ -22,11 +22,4 @@
 	padding: 10px;
 }
 
-input {
-	width: 100%;
-}
 
-.inputError {
-	outline: 1px solid red;
-    background-color: #ff6f6f;
-}

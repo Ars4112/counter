@@ -1,0 +1,50 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.showValue {
+	min-height: 40px;
+	width: 200px;
+	border: 1px solid #272727;
+	padding: 10px;
+	position: relative;
+}
+
+.button {
+	background-color: transparent;
+	border: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	cursor: pointer;
+}
+
+.list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+
+	width: 200px;
+	border: 1px solid #272727;
+}
+
+.item {
+	width: 100%;
+	padding: 10px;
+}
+
+.active {
+	background-color: aquamarine;
+}
+
+.item:focus {
+	outline: none;
+}

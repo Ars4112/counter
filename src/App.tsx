@@ -2,19 +2,22 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { Counter } from "./components/Counter/Counter";
 import { Settings } from "./components/Settings/Settings";
+import { Select } from "./components/Select/Select";
 
 function App() {
 	useEffect(() => {
-		
 		const getMaxValue = localStorage.getItem("maxValue");
 		const getStartValue = localStorage.getItem("startValue");
 		if (getMaxValue && getStartValue) {
 			setInputMaxValue(JSON.parse(getMaxValue));
 			setInputStartValue(JSON.parse(getStartValue));
-			setMaxValue(JSON.parse(getMaxValue));
-			setCount(JSON.parse(getStartValue))
+			setMaxValue(+JSON.parse(getMaxValue));
+			setCount(+JSON.parse(getStartValue));
 		}
 	}, []);
+
+	const [selectValue, setSelectValue] = useState<string>("");
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const [count, setCount] = useState<number>(0);
 	const [maxValue, setMaxValue] = useState<number>(0);
@@ -27,10 +30,7 @@ function App() {
 	);
 	const [error, setError] = useState<boolean>(false);
 
-	
-		const value = (count * 100) / maxValue;
-	
-	
+	const value = (count * 100) / maxValue;
 
 	const increaseValue = () => {
 		if (count === maxValue) return;
@@ -52,27 +52,55 @@ function App() {
 		}
 	};
 
-	return (
-		<div className="App">
-			<Settings
-				inputMaxValue={inputMaxValue}
-				setInputMaxValue={setInputMaxValue}
-				inputStartValue={inputStartValue}
-				setInputStartValue={setInputStartValue}
-				setSettings={setSettings}
-				setMessage={setMessage}
-				setError={setError}
-				error={error}
-			/>
+	const a = (e: any) => {
+		if ((e.target as HTMLElement).id === "item") return;
+		if ((e.target as HTMLElement).id === "select") {
+			setIsOpen(!isOpen);
+			return;
+		}
 
-			<Counter
-				count={count}
-				increaseValue={increaseValue}
-				recetValue={recetValue}
-				value={value ? value : 0}
-				maxValue={maxValue}
-				message={message}
-				error={error}
+		setIsOpen(false);
+	};
+
+	const selectKeyHandler: React.ComponentProps<"div">["onKeyDown"] = (e) => {
+		if (e.key === "Enter") {
+			a(e);
+		}
+	};
+
+	return (
+		<div className="App" 
+		onClick={a} 
+		onKeyUp={selectKeyHandler}
+		>
+			<div className="counterContainer">
+				<Settings
+					inputMaxValue={inputMaxValue}
+					setInputMaxValue={setInputMaxValue}
+					inputStartValue={inputStartValue}
+					setInputStartValue={setInputStartValue}
+					setSettings={setSettings}
+					setMessage={setMessage}
+					setError={setError}
+					error={error}
+				/>
+
+				<Counter
+					count={count}
+					increaseValue={increaseValue}
+					recetValue={recetValue}
+					value={value ? value : 0}
+					maxValue={maxValue}
+					message={message}
+					error={error}
+				/>
+			</div>
+			<hr />
+			<Select
+				selectValue={selectValue}
+				isOpen={isOpen}
+				setIsOpen={setIsOpen}
+				setSelectValue={setSelectValue}
 			/>
 		</div>
 	);
