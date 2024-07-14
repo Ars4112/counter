@@ -69,8 +69,7 @@ function App() {
 	};
 
 	return (
-		<div className="App" 
-		onClick={a} 
+		<div className="App" onClick={a} 
 		onKeyUp={selectKeyHandler}
 		>
 			<div className="counterContainer">

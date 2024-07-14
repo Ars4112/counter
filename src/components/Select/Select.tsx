@@ -42,21 +42,19 @@ export function Select(props: SelectPropsType) {
 							: selectValueArray[i - 1];
 					if (activeElement) {
 						setIsActive(activeElement.id);
-                       
+
 						break;
 					}
 				}
 			}
 		}
 
-        if (e.key === "Enter") {
-           if (activeFocusElement) setSelectValueHandler(activeFocusElement?.title);
-        }
+		if (e.key === "Enter") {
+			if (activeFocusElement) setSelectValueHandler(activeFocusElement?.title);
+		}
 	};
 
-	const selectHoverHandler = (id: number) => {
-		setIsActive(id);
-	};
+	const selectHoverHandler = (id: number) => setIsActive(id);
 
 	return (
 		<div className={s.container}>
