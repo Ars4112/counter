@@ -57,7 +57,7 @@ export function Settings(props: SettingsPropsType) {
 			id: 2,
 			label: "Start value",
 			function: getStartValueHendler,
-			value: inputStartValue,
+			value: inputStartValue.toString(),
 		},
 	];
 	return (

@@ -3,52 +3,67 @@ import "./App.css";
 import { Counter } from "./components/Counter/Counter";
 import { Settings } from "./components/Settings/Settings";
 import { Select } from "./components/Select/Select";
+import { useDispatch, useSelector } from "react-redux";
+import { AppRootStateType } from "./state/store";
+import { incrementCountAC, resetCountAC } from "./state/counterReducer";
+import { maxValueAC } from "./state/setMaxValueReduser";
+import { startValueAC } from "./state/setStartValueReducer";
 
 function App() {
-	useEffect(() => {
-		const getMaxValue = localStorage.getItem("maxValue");
-		const getStartValue = localStorage.getItem("startValue");
-		if (getMaxValue && getStartValue) {
-			setInputMaxValue(JSON.parse(getMaxValue));
-			setInputStartValue(JSON.parse(getStartValue));
-			setMaxValue(+JSON.parse(getMaxValue));
-			setCount(+JSON.parse(getStartValue));
-		}
-	}, []);
+	// useEffect(() => {
+	// 	const getMaxValue = localStorage.getItem("maxValue");
+	// 	const getStartValue = localStorage.getItem("startValue");
+	// 	if (getMaxValue && getStartValue) {
+	// 		setInputMaxValue(JSON.parse(getMaxValue));
+	// 		setInputStartValue(JSON.parse(getStartValue));
+	// 		setMaxValue(+JSON.parse(getMaxValue));
+	// 		setCount(+JSON.parse(getStartValue));
+	// 	}
+	// }, []);
+
+	const count = useSelector<AppRootStateType, number>((state) => state.counter);
+	const maxValue = useSelector<AppRootStateType, string>(
+		(state) => state.maxValue
+	);
+
+	const startValue = useSelector<AppRootStateType, string>(
+		(state) => state.startValue
+	);
+	const dispatch = useDispatch();
 
 	const [selectValue, setSelectValue] = useState<string>("");
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const [count, setCount] = useState<number>(0);
-	const [maxValue, setMaxValue] = useState<number>(0);
+	// const [maxValue, setMaxValue] = useState<number>(0);
 
-	const [inputMaxValue, setInputMaxValue] = useState<string>("");
-	const [inputStartValue, setInputStartValue] = useState<string>("");
+	// const [inputMaxValue, setInputMaxValue] = useState<string>("");
+	// const [inputStartValue, setInputStartValue] = useState<string>("");
 
 	const [message, setMessage] = useState<string>(
 		"enter values and press 'set'"
 	);
 	const [error, setError] = useState<boolean>(false);
 
-	const value = (count * 100) / maxValue;
+	const value = (count * 100) / +maxValue;
 
 	const increaseValue = () => {
-		if (count === maxValue) return;
-		setCount(count + 1);
-	};
-	const recetValue = () => setCount(+inputStartValue);
+		if (count === +maxValue) return;
 
-	const setLocalStorage = () => {
-		localStorage.setItem("maxValue", JSON.stringify(inputMaxValue));
-		localStorage.setItem("startValue", JSON.stringify(inputStartValue));
+		dispatch(incrementCountAC(count));
 	};
+	const recetValue = () => dispatch(resetCountAC(+startValue));
+
+	// const setLocalStorage = () => {
+	// 	localStorage.setItem("maxValue", JSON.stringify(inputMaxValue));
+	// 	localStorage.setItem("startValue", JSON.stringify(inputStartValue));
+	// };
 
 	const setSettings = () => {
-		if (+inputMaxValue && +inputStartValue) {
-			setMaxValue(+inputMaxValue);
-			setCount(+inputStartValue);
+		if (+maxValue && startValue) {
+			dispatch(maxValueAC(maxValue));
+			dispatch(resetCountAC(+startValue));
 			setMessage("");
-			setLocalStorage();
+			// setLocalStorage();
 		}
 	};
 
@@ -68,15 +83,21 @@ function App() {
 		}
 	};
 
+	const setInputMaxValue = (maxValue: string) => {
+		dispatch(maxValueAC(maxValue));
+	};
+
+	const setInputStartValue = (startValue: string)=> {
+		dispatch(startValueAC(startValue));
+	}
+
 	return (
-		<div className="App" onClick={a} 
-		onKeyUp={selectKeyHandler}
-		>
+		<div className="App" onClick={a} onKeyUp={selectKeyHandler}>
 			<div className="counterContainer">
 				<Settings
-					inputMaxValue={inputMaxValue}
+					inputMaxValue={maxValue}
 					setInputMaxValue={setInputMaxValue}
-					inputStartValue={inputStartValue}
+					inputStartValue={startValue}
 					setInputStartValue={setInputStartValue}
 					setSettings={setSettings}
 					setMessage={setMessage}

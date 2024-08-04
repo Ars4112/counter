@@ -36,7 +36,7 @@ export function Input({
 			<input
 				className={errorInput ? `${s.inputError}` : ""}
 				type="number"
-				value={value}
+				value={value.toString()}
 				onChange={func}
 			/>
 		</label>
