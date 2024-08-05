@@ -1,19 +1,17 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import s from "./Settings.module.css";
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
+import { useDispatch } from "react-redux";
+import { maxValueAC } from "../../state/setMaxValueReduser";
+import { startCountAC } from "../../state/counterReducer";
+import { startValueAC } from "../../state/setStartValueReducer";
 
 type SettingsPropsType = {
-	inputMaxValue: string;
-	setInputMaxValue: (value: string) => void;
-	inputStartValue: string;
-	setInputStartValue: (value: string) => void;
-	setSettings: () => void;
 	setMessage: (value: string) => void;
 	setError: (error: boolean) => void;
 	error: boolean;
 };
-
 
 type InputType = {
 	id: number;
@@ -22,28 +20,54 @@ type InputType = {
 	value: string;
 };
 
-
-
 export function Settings(props: SettingsPropsType) {
-	const {
-		inputMaxValue,
-		setInputMaxValue,
-		inputStartValue,
-		setInputStartValue,
-		setSettings,
-		setMessage,
-		setError,
-		error,
-	} = props;
+	const { setMessage, setError, error } = props;
+
+	const dispatch = useDispatch();
+
+	const [inputMaxValue, setInputMaxValue] = useState<string>("");
+	const [inputStartValue, setInputStartValue] = useState<string>("");
+	const [disabledButton, setDisabledButton]= useState<boolean>(true)
+	
+
+	const setSettings = () => {
+		dispatch(maxValueAC(inputMaxValue));
+		dispatch(startCountAC(+inputStartValue));
+		dispatch(startValueAC(inputStartValue));
+		setMessage("");
+		// setLocalStorage();
+	};
 
 	const getMaxValueHendler = (e: ChangeEvent<HTMLInputElement>) => {
+		const value = e.currentTarget.value;
 		setInputMaxValue(e.currentTarget.value);
-		setMessage("enter values and press 'set'");
+// debugger
+		if (+value <= +inputStartValue) {
+			setMessage("Incorrect value");
+			setError(true);
+			
+		} else {
+			setError(false);
+			setMessage("enter values and press 'set'");
+			
+		}
+		setDisabledButton(error)
 	};
 
 	const getStartValueHendler = (e: ChangeEvent<HTMLInputElement>) => {
-		setInputStartValue(e.currentTarget.value);
-		setMessage("enter values and press 'set'");
+		const value = e.currentTarget.value;
+		setInputStartValue(value);
+
+		if (+value >= +inputMaxValue) {
+			setMessage("Incorrect value");
+			setError(true);
+			
+		} else {
+			setError(false);
+			setMessage("enter values and press 'set'");
+			
+		}
+		setDisabledButton(error)
 	};
 
 	const inputArray: InputType[] = [
@@ -57,19 +81,28 @@ export function Settings(props: SettingsPropsType) {
 			id: 2,
 			label: "Start value",
 			function: getStartValueHendler,
-			value: inputStartValue.toString(),
+			value: inputStartValue,
 		},
 	];
+
 	return (
 		<div className={s.container}>
 			<div className={s.counterWrapper}>
 				{inputArray.map((i) => {
 					return (
-						<Input key={i.id} label={i.label} value={i.value} func={i.function} setError={setError} setMessage={setMessage} inputMaxValue={inputMaxValue} inputStartValue={inputStartValue}/>
+						<Input
+							key={i.id}
+							label={i.label}
+							value={i.value}
+							func={i.function}
+							setDisabledButton={setDisabledButton}
+							
+							error={error}
+						/>
 					);
 				})}
 			</div>
-			<Button title={"set"} onClick={setSettings} disabled={error} />
+			<Button title={"set"} onClick={setSettings} disabled={disabledButton || error} />
 		</div>
 	);
 }

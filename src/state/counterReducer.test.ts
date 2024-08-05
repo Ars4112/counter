@@ -1,7 +1,7 @@
 import {
 	counterReducer,
 	incrementCountAC,
-	resetCountAC,
+	startCountAC,
 } from "./counterReducer";
 
 let startState = 2;
@@ -14,7 +14,7 @@ test("increment counter-reducer", () => {
 });
 
 test("reset counter-reducer", () => {
-	const action = resetCountAC(startState);
+	const action = startCountAC(startState);
 	const endState = counterReducer(startState + 1, action);
 
     expect(endState).toBe(startState)

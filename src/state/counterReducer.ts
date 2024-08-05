@@ -4,23 +4,23 @@ type IncrementActionType = {
 };
 
 type ResetActionType = {
-	type: "RESET-COUNT";
+	type: "START-COUNT";
 	startCount: number;
 };
 
 type ActionType = IncrementActionType | ResetActionType;
 
-const initionalState = 0;
+// const initionalState = 0;
 
 export const counterReducer = (
-	state: number = initionalState,
+	state: number = 0,
 	action: ActionType
 ): number => {
 	switch (action.type) {
 		case "INCREMENT-COUNT": {
 			return action.count + 1;
 		}
-		case "RESET-COUNT": {
+		case "START-COUNT": {
 			return action.startCount;
 		}
 		default:
@@ -32,7 +32,7 @@ export const incrementCountAC = (count: number): IncrementActionType => ({
 	type: "INCREMENT-COUNT",
 	count,
 });
-export const resetCountAC = (startCount: number): ResetActionType => ({
-	type: "RESET-COUNT",
+export const startCountAC = (startCount: number): ResetActionType => ({
+	type: "START-COUNT",
 	startCount,
 });

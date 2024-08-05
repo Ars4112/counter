@@ -1,31 +1,43 @@
 import s from "./Counter.module.css";
 import { Button } from "../Button/Button";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppRootStateType } from "../../state/store";
+import { incrementCountAC, startCountAC } from "../../state/counterReducer";
 
 type CounterPropsType = {
-	count: number;
-	value: number;
-	maxValue: string;
-	increaseValue: () => void;
-	recetValue: () => void;
+	
 	message: string;
 	error: boolean;
 };
 
 export function Counter(props: CounterPropsType) {
-	const { count, increaseValue, recetValue, value, maxValue, message, error } =
-		props;
+	const { message, error } = props;
 
-		
-		
-		
+	const count = useSelector<AppRootStateType, number>((state) => state.counter);
+	const maxValue = useSelector<AppRootStateType, string>(
+		(state) => state.maxValue
+	);
+	const startValue = useSelector<AppRootStateType, string>(
+		(state) => state.startValue
+	);
+	const dispatch = useDispatch();
+
+	const value = (count * 100) / +maxValue;
+
+	const increaseValue = () => {
+		if (count === +maxValue) return;
+
+		dispatch(incrementCountAC(count));
+	};
+	const recetValue = () => dispatch(startCountAC(+startValue));
+
+
 	return (
 		<div className={s.container}>
 			<div>Max Value: {maxValue}</div>
 			<div className={s.counterWrapper}>
-				{count && !error ? (
+				{startValue && !error ? (
 					<span className={count === +maxValue ? `${s.counter}` : ""}>
 						{count}
 					</span>
@@ -45,7 +57,7 @@ export function Counter(props: CounterPropsType) {
 				<Button
 					title={"recet"}
 					onClick={recetValue}
-					disabled={count === 0 ? true : false}
+					disabled={count !== +maxValue}
 				/>
 			</div>
 		</div>
