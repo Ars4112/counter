@@ -23,8 +23,8 @@ export function Counter(props: CounterPropsType) {
 	);
 	const dispatch = useDispatch();
 
-	const value = (count * 100) / +maxValue;
-
+	const value = count ? (count * 100) / +maxValue : 0;
+	
 	const increaseValue = () => {
 		if (count === +maxValue) return;
 
@@ -42,7 +42,7 @@ export function Counter(props: CounterPropsType) {
 						{count}
 					</span>
 				) : (
-					<span className={!error ? `${s.message}` : `${s.errorMessage}`}>
+					<span className={message !== "Incorrect value" ? `${s.message}` : `${s.errorMessage}`}>
 						{message}
 					</span>
 				)}

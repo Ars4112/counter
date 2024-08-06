@@ -27,10 +27,10 @@ export function Settings(props: SettingsPropsType) {
 
 	const [inputMaxValue, setInputMaxValue] = useState<string>("");
 	const [inputStartValue, setInputStartValue] = useState<string>("");
-	const [disabledButton, setDisabledButton]= useState<boolean>(true)
-	
 
 	const setSettings = () => {
+		if (!inputMaxValue || !inputStartValue) return;
+
 		dispatch(maxValueAC(inputMaxValue));
 		dispatch(startCountAC(+inputStartValue));
 		dispatch(startValueAC(inputStartValue));
@@ -40,34 +40,34 @@ export function Settings(props: SettingsPropsType) {
 
 	const getMaxValueHendler = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.currentTarget.value;
-		setInputMaxValue(e.currentTarget.value);
-// debugger
-		if (+value <= +inputStartValue) {
+		setInputMaxValue(value);
+		if (+value < 0) {
+			setMessage("Incorrect value");
+			return;
+		} else setMessage("enter values and press 'set'");
+		if (+inputStartValue >= +value) {
 			setMessage("Incorrect value");
 			setError(true);
-			
 		} else {
-			setError(false);
 			setMessage("enter values and press 'set'");
-			
+			setError(false);
 		}
-		setDisabledButton(error)
 	};
 
 	const getStartValueHendler = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.currentTarget.value;
 		setInputStartValue(value);
-
+		if (+value < 0) {
+			setMessage("Incorrect value");
+			return;
+		} else setMessage("enter values and press 'set'");
 		if (+value >= +inputMaxValue) {
 			setMessage("Incorrect value");
 			setError(true);
-			
 		} else {
-			setError(false);
 			setMessage("enter values and press 'set'");
-			
+			setError(false);
 		}
-		setDisabledButton(error)
 	};
 
 	const inputArray: InputType[] = [
@@ -85,6 +85,13 @@ export function Settings(props: SettingsPropsType) {
 		},
 	];
 
+	const disabledButtonСondition =
+		error ||
+		inputStartValue === "" ||
+		inputMaxValue === "" ||
+		+inputStartValue < 0 ||
+		+inputMaxValue < 0;
+
 	return (
 		<div className={s.container}>
 			<div className={s.counterWrapper}>
@@ -95,14 +102,16 @@ export function Settings(props: SettingsPropsType) {
 							label={i.label}
 							value={i.value}
 							func={i.function}
-							setDisabledButton={setDisabledButton}
-							
-							error={error}
+							error={error || +i.value < 0}
 						/>
 					);
 				})}
 			</div>
-			<Button title={"set"} onClick={setSettings} disabled={disabledButton || error} />
+			<Button
+				title={"set"}
+				onClick={setSettings}
+				disabled={disabledButtonСondition}
+			/>
 		</div>
 	);
 }

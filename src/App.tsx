@@ -24,7 +24,7 @@ function App() {
 		"enter values and press 'set'"
 	);
 	const [error, setError] = useState<boolean>(false);
-	console.log(error);
+
 	
 
 	// const setLocalStorage = () => {
